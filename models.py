@@ -13,7 +13,7 @@ cf. 3rd-party-licenses.txt file in the root directory of this source tree.
 
 import logging, torch
 from typing import List
-from transformers import BertTokenizer, BertConfig, BertModel
+from transformers import LukeTokenizer, LukeConfig, LukeModel
 from data import Sentence
 
 
@@ -49,12 +49,12 @@ class MLP(torch.nn.Module):
 class TransformerEncoder(torch.nn.Module):
     def __init__(self, args, devive):
         super(TransformerEncoder, self).__init__()
-        assert args.embedding_type == "bert"
+        assert args.embedding_type == "luke"
         self.embedding_type = args.embedding_type
         self.device = devive
-        self.tokenizer = BertTokenizer.from_pretrained(args.pretrained_dir)
-        self.config = BertConfig.from_pretrained(args.pretrained_dir, output_hidden_states=True)
-        self.model = BertModel.from_pretrained(pretrained_model_name_or_path=args.pretrained_dir, config=self.config)
+        self.tokenizer = LukeTokenizer.from_pretrained(args.pretrained_dir)
+        self.config = LukeConfig.from_pretrained(args.pretrained_dir, output_hidden_states=True)
+        self.model = LukeModel.from_pretrained(pretrained_model_name_or_path=args.pretrained_dir, config=self.config)
         self.model.eval()
         self.dropout = torch.nn.Dropout(args.dropout) if args.dropout > 0.0 else None
         self.word_dropout = WordDropout(args.word_dropout) if args.word_dropout > 0.0 else None
